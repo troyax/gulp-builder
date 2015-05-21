@@ -4,15 +4,15 @@ module.exports = function (gulp, plugins, options, data) {
         var directory = options.modules.root + data.module;
         var buildInfo = require(directory + '/' + options.modules.buildInfoFile);
 
-        return plugins.browserify(directory + '/' + buildInfo.entry).transform(plugins.reactify).bundle()
+        return  gulp.src(directory + '/' + buildInfo.sass.directory + buildInfo.sass.entry)
+            .pipe(plugins.sass())
             .on('error', function (error) {
                 console.log(error);
                 this.emit('end')
             })
-            .pipe(plugins.source( buildInfo.rename || 'app.js' ))
-            .pipe(plugins.gulpif(options.minify, plugins.buffer()))
-            .pipe(plugins.gulpif(options.minify, plugins.uglify()))
-            .pipe(gulp.dest( options.build.root + buildInfo.destination + 'js/' ))
+            .pipe(plugins.concat(buildInfo.sass.rename || 'app.css'))
+            .pipe(plugins.gulpif(options.minify, plugins.cssmin()))
+            .pipe(gulp.dest( options.build.root + buildInfo.destination + 'css/' ))
             .pipe(plugins.browserSync.reload({stream: true}));
     };
 
