@@ -1,6 +1,6 @@
 {
   "name": "gulp-builder",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Gulp Builder - Utils to build a gulp file",
   "main": "index.js",
   "scripts": {
