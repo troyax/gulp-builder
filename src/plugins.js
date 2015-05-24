@@ -6,6 +6,7 @@ module.exports = {
     concat: require('gulp-concat'),
     cssmin: require('gulp-minify-css'),
     del: require('del'),
+    gulp: require('gulp'),
     gulpif: require('gulp-if'),
     handlebars: require('gulp-compile-handlebars'),
     jshint: require('gulp-jshint'),
