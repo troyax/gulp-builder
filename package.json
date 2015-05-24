@@ -1,7 +1,7 @@
 {
   "name": "gulp-builder",
   "version": "0.0.6",
-  "description": "Gulp Builder - Utils to build a gulp file",
+  "description": "Gulp Builder - Utils to build a gulp file (still in dev [not stable], not use [Estimated release: August])",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
