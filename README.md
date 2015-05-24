@@ -1,6 +1,5 @@
 # gulp-builder
-
-> All kind of tasks for gulp
+All kind of tasks and utils for gulp (do not use [not stable version, estimated release: August 2015])
 
 ## Installation
 
