@@ -4,8 +4,7 @@
   "description": "All kind of tasks and utils for gulp (do not use [not stable version, estimated release: August 2015])",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm install"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,7 @@
     "url": "https://github.com/troianoandres/gulp-builder/issues"
   },
   "homepage": "https://github.com/troianoandres/gulp-builder",
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "^2.6.4",
     "browserify": "^9.0.8",
     "chalk": "^1.0.0",
