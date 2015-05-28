@@ -10,22 +10,42 @@ All kind of tasks and utils for gulp (do not use [not stable version, estimated 
 Inside your gulpfile.js:
 
 ```javascript
-var gulp = require('gulp');
 var builder = require('gulp-builder');
+var run = builder.getPlugin('run-sequence');
+var gulp = builder.getPlugin('gulp');
+var argv = builder.getPlugin('yargs').argv;
+var task = builder.getTask;
+var util = builder.getUtil;
 
 var options = {
     root: __dirname,
+    minify: (argv.production || argv.minify) || false,
     build: {
         root: __dirname + '/app/'
     },
     modules: {
         root: __dirname + '/app-modules/',
         buildInfoFile: 'build-info'
+    },
+    'core-watch': {
+        js: [
+            __dirname + '/core/data/*.js',
+            __dirname + '/core/components/*.js',
+            __dirname + '/core/components/mixins/*.js'
+        ],
+        sass: [
+            __dirname + '/core/components/*.scss',
+            __dirname + '/core/components/mixins/*.scss',
+            __dirname + '/core/sass/*.scss',
+            __dirname + '/core/sass/**/*.scss'
+        ]
     }
 };
-var data = {module: 'main-app'};
 
-gulp.task('js-main-app-build', builder.getTask('js-module-build', options, data));
+var data = util('build-js-tasks', options);
+var buildTasks = data.buildTasks;
+
+gulp.task('browser-sync', task('browser-sync', options, data));
 ```
 
 Will build your configured module (with the build-info.js file inside the modules directory) with browserify and the
