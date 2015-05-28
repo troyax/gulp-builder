@@ -1,4 +1,4 @@
-module.exports = function (gulp, plugins, options, data) {
+module.exports = function (gulp, options, data) {
     var sass = require('gulp-sass');
     var concat = require('gulp-concat');
     var gulpif = require('gulp-if');

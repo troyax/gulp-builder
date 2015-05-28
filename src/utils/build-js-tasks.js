@@ -11,7 +11,7 @@ module.exports = function (gulp, options, data, builder) {
         var sassBuildTaskName = 'sass-' + currentModule + '-build';
         var htmlBuildTaskName = 'html-' + currentModule + '-build';
 
-        var data = {
+        data = {
             module: currentModule,
             htmlTemplateData: {}
         };

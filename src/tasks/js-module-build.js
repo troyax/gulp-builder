@@ -1,4 +1,4 @@
-module.exports = function (gulp, plugins, options, data) {
+module.exports = function (gulp, options, data) {
     var browserify = require('browserify');
     var reactify = require('reactify');
     var source = require('vinyl-source-stream');
