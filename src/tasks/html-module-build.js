@@ -1,4 +1,7 @@
-module.exports = function (gulp, plugins, options, data) {
+module.exports = function (gulp, options, data) {
+    var handlebars = require('gulp-compile-handlebars');
+    var concat = require('gulp-concat');
+    var browserSync = require('browser-sync');
 
     return function () {
         var directory = options.modules.root + data.module;
@@ -9,10 +12,10 @@ module.exports = function (gulp, plugins, options, data) {
                 console.log(error);
                 this.emit('end')
             })
-            .pipe(plugins.handlebars(data.htmlTemplateData))
-            .pipe(plugins.concat(buildInfo.html.rename))
+            .pipe(handlebars(data.htmlTemplateData))
+            .pipe(concat(buildInfo.html.rename))
             .pipe(gulp.dest(options.build.root + buildInfo.destination))
-            .pipe(plugins.browserSync.reload({stream: true}));
+            .pipe(browserSync.reload({stream: true}));
     };
 
 };

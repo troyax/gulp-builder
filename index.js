@@ -1,17 +1,19 @@
-var Builder = {
-    plugins: require('./src/plugins.js')
+var gulp = require('gulp');
+
+var getTask = function (task, options, data) {
+    return require(__dirname + "/src/tasks/" + task)(gulp, options, data);
 };
 
-Builder.getTask = function (task, options, data) {
-    return require(__dirname + "/src/tasks/" + task)(this.plugins.gulp, this.plugins, options, data);
+var getUtil = function (util, options, data) {
+    return require(__dirname + "/src/utils/" + util)(gulp, options, data, this);
 };
 
-Builder.util = function (util, options, data) {
-    return require(__direname + "/src/utils/" + utils)(this.plugins.gulp, this, options, data);
+var getPlugin = function (plugin) {
+    return require(plugin);
 };
 
-Builder.processOptions = function (options) {
-
+module.exports = {
+    getTask: getTask,
+    getUtil: getUtil,
+    getPlugin: getPlugin
 };
-
-module.exports = Builder;
