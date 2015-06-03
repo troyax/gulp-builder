@@ -10,8 +10,9 @@ module.exports = function (gulp, options, data) {
     return function () {
         var directory = options.modules.root + data.module;
         var buildInfo = require(directory + '/' + options.modules.buildInfoFile);
+        var entryFile = directory + '/' + (buildInfo.js.directory || '') + (buildInfo.js.entry || 'index.js');
 
-        return browserify(directory + '/' + buildInfo.js.directory + buildInfo.js.entry).transform(reactify).bundle()
+        return browserify(entryFile).transform(reactify).bundle()
             .on('error', function (error) {
                 console.log(error);
                 this.emit('end')
