@@ -9,7 +9,15 @@ module.exports = function (gulp, options, data) {
         var directory = options.modules.root + data.module;
         var buildInfo = require(directory + '/' + options.modules.buildInfoFile);
 
-        return  gulp.src(directory + '/' + buildInfo.sass.directory + buildInfo.sass.entry)
+        var files = [
+            directory + '/' + buildInfo.sass.directory + buildInfo.sass.entry
+        ];
+
+        if (buildInfo.sass['font-awesome']) {
+            files.unshift('../../node_modules/font-awesome/scss/font-awesome.scss');
+        }
+
+        return  gulp.src(files)
                     .pipe(sass())
                     .on('error', function (error) {
                         console.log(error);

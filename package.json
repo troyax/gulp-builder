@@ -26,6 +26,7 @@
     "browserify": "^9.0.8",
     "chalk": "^1.0.0",
     "del": "^1.1.1",
+    "font-awesome": "^4.3.0",
     "gulp": "^3.8.11",
     "gulp-compile-handlebars": "^0.4.4",
     "gulp-concat": "^2.5.2",
@@ -39,9 +40,7 @@
     "lodash": "^3.7.0",
     "reactify": "^1.1.0",
     "rename": "^1.0.3",
-    "run": "^1.4.0",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "yargs": "^3.9.1"
+    "vinyl-source-stream": "^1.1.0"
   }
 }
