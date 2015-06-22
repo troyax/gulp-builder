@@ -15,6 +15,9 @@ module.exports = function (gulp, options, data) {
 
         if (buildInfo.sass['font-awesome']) {
             files.unshift('../../node_modules/font-awesome/scss/font-awesome.scss');
+
+            gulp.src('../../node_modules/font-awesome/fonts/*')
+                .pipe(gulp.dest(options.build.root + buildInfo.destination + 'fonts/'));
         }
 
         return  gulp.src(files)
@@ -25,7 +28,7 @@ module.exports = function (gulp, options, data) {
                     })
                     .pipe(concat(buildInfo.sass.rename || 'app.css'))
                     .pipe(gulpif(options.minify, cssmin()))
-                    .pipe(gulp.dest( options.build.root + buildInfo.destination + 'css/' ))
+                    .pipe(gulp.dest(options.build.root + buildInfo.destination + 'css/'))
                     .pipe(browserSync.reload({stream: true}));
     };
 
