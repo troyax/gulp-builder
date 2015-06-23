@@ -13,10 +13,10 @@ module.exports = function (gulp, options, data) {
             directory + '/' + buildInfo.sass.directory + buildInfo.sass.entry
         ];
 
-        if (buildInfo.sass['font-awesome']) {
-            files.unshift('../../node_modules/font-awesome/scss/font-awesome.scss');
+        if (buildInfo.sass['fontAwesome']) {
+            files.unshift(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/scss/font-awesome.scss');
 
-            gulp.src('../../node_modules/font-awesome/fonts/*')
+            gulp.src(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/fonts/*')
                 .pipe(gulp.dest(options.build.root + buildInfo.destination + 'fonts/'));
         }
 
