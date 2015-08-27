@@ -1,5 +1,14 @@
 # gulp-builder
-All kind of tasks and utils for gulp (do not use [not stable version, estimated release: August 2015])
+Gulp builder project, used to build all kind of project, intended to have flexibility for each one of them.
+Includes all kind of tasks and utils 
+
+** *DO NOT USE [not stable version, estimated release: November 2015], sorry for the delay caused by personal issues* **
+
+Still pending to do a full refactor of the package logic and also adding new functionality like:
+-   Building for publishing projects
+-   Support for multiple JS frameworks
+-   Support for Material Design Iconfont
+-   Much more
 
 ## Installation
 
