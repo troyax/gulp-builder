@@ -1,43 +1,68 @@
-module.exports = function (gulp, options, data) {
-    var browserSync = require('browser-sync');
+var browserSync = require('browser-sync');
+var _ = require('lodash');
 
-    return function () {
-        var buildTasks = data.buildTasks;
-        var modules = data.modules;
+var getDepthPattern = function (depth, depthLevel) {
+    var depthPattern = '';
 
+    if (depthLevel < depth) {
+        depthPattern = '**/' + getDepthPattern(depth, depthLevel + 1);
+    }
+
+    return depthPattern;
+};
+
+var processPatterns = function (config) {
+    var files = config.files;
+    var depth = (config.depth || 3) + 1;
+    var filePattern = config.fileNamePattern;
+    var patternsToWatch = [];
+
+
+    _.each(files, function (pattern) {
+        var index = 0;
+
+        for (index; index < depth; index++) {
+            patternsToWatch.push(pattern + getDepthPattern(index, 0) + filePattern)
+        }
+    });
+
+    return patternsToWatch;
+};
+
+var addBrowserSyncTask = function (gulp, config, applicationTasks) {
+
+    gulp.task('browser-sync', function (cb) {
         browserSync.init({
             server: {
-                baseDir: options.build.root
+                baseDir: config.root + config.build.dir
             },
             port: '8080'
         });
 
-        gulp.watch(options['core-watch'].js, buildTasks.js, browserSync.reload);
-        gulp.watch(options['core-watch'].sass, buildTasks.sass, browserSync.reload);
+        _.each(config.applications, function (application) {
+            var applicationFullPath = config.root + application.path;
 
-        for (var index = 0; index < modules.length; index++) {
-            var currentModule = modules[index];
-            var jsWatchPatterns = [
-                options.modules.root + currentModule + '/*.js', 
-                options.modules.root + currentModule + '/**/*.js', 
-                options.modules.root + currentModule + '/**/**/*.js'
-                ];
-            var sassWatchPatterns = [
-                options.modules.root + currentModule + '/*.scss', 
-                options.modules.root + currentModule + '/**/*.scss', 
-                options.modules.root + currentModule + '/**/**/*.scss'
-            ];
-            var htmlWatchPatterns = [
-                options.modules.root + currentModule + '/*.html', 
-                options.modules.root + currentModule + '/**/*.html', 
-                options.modules.root + currentModule + '/**/**/*.html'
-            ];
+            gulp.watch(processPatterns({
+                fileNamePattern: '*.js',
+                files: [applicationFullPath]
+            }), [application.id + ':build-js'], browserSync.reload);
+            gulp.watch(processPatterns({
+                fileNamePattern: '*.scss',
+                files: [applicationFullPath]
+            }), [application.id + ':build-sass'], browserSync.reload);
+            gulp.watch(processPatterns({
+                fileNamePattern: '*.html',
+                files: [applicationFullPath]
+            }), [application.id + ':build-html'], browserSync.reload);
+        });
 
-            gulp.watch(jsWatchPatterns, ['js-' + currentModule + '-build']);
-            gulp.watch(sassWatchPatterns, ['sass-' + currentModule + '-build']);
-            gulp.watch(htmlWatchPatterns, ['html-' + currentModule + '-build']);
-        }
+        gulp.watch(processPatterns(config.watch.js), applicationTasks.js, browserSync.reload);
+        gulp.watch(processPatterns(config.watch.sass), applicationTasks.sass, browserSync.reload);
 
-    };
+        cb();
+    });
+};
 
+module.exports = {
+    addBrowserSyncTask: addBrowserSyncTask
 };

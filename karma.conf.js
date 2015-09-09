@@ -18,6 +18,7 @@ module.exports = function(config) {
         frameworks: ['browserify', 'mocha'],
 
         files: [
+            'phantomjs-shims.js',
             'lib-test/global.js',
             'src/**/__tests__/*.js'
         ],

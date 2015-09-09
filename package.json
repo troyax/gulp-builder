@@ -4,7 +4,7 @@
   "description": "All kind of tasks and utils for gulp (do not use [not stable version, estimated release: August 2015])",
   "main": "src/index.js",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -44,15 +44,12 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {
-    "browserify": "^9.0.8",
     "chai": "^3.2.0",
     "coverageify": "^1.0.4",
-    "karma": "^0.13.9",
-    "karma-browserify": "^4.3.0",
+    "karma": "^0.13.2",
+    "karma-browserify": "^4.2.1",
     "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^0.2.0",
     "karma-coverage": "^0.2.6",
-    "karma-firefox-launcher": "^0.1.6",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.1",
     "mocha": "^2.2.5",

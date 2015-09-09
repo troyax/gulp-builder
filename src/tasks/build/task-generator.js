@@ -1,22 +1,23 @@
-var fs = require('fs');
-var _ = require('lodash');
-var helper = require('./helper-js');
+var helper = require('./task-helper');
 
 var addBuildTasks = function (gulp, config, application) {
     var applicationName = application.id;
-    var applicationPath = config.root + application.path;
-    var buildTask = {};
+    var jsBuildTaskName = applicationName + ':build-js';
+    var sassBuildTaskName = applicationName + ':build-sass';
+    var htmlBuildTaskName = applicationName + ':build-html';
+    var applicationBuildTaskName = applicationName + ':build';
 
-    var sassBuildTaskName = 'sass-' + currentModule + '-build';
-    var htmlBuildTaskName = 'html-' + currentModule + '-build';
+    helper.addJavaScriptBuildTask(gulp, config, application, jsBuildTaskName);
+    helper.addSassBuildTask(gulp, config, application, sassBuildTaskName);
+    helper.addHTMLBuildTask(gulp, config, application, htmlBuildTaskName);
 
-        //helper.addJavaScriptBuildTask(gulp, config, currentModule);
-
-        //gulp.task(jsBuildTaskName, task('js-module-build', options, data) );
+    gulp.task(applicationBuildTaskName, [jsBuildTaskName, sassBuildTaskName, htmlBuildTaskName]);
 
     return {
-        buildTasks: buildTasks,
-        modules: modules
+        js: jsBuildTaskName,
+        sass: sassBuildTaskName,
+        html: htmlBuildTaskName,
+        main: applicationBuildTaskName
     };
 };
 
