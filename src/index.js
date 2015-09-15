@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var buildTaskGenerator = require('./tasks/build/task-generator');
+var componentsBuildTaskGenerator = require('./tasks/components/task-generator');
 var addBrowserSyncTask = require('./tasks/server/browser-sync').addBrowserSyncTask;
 
 var processRoot = function (root) {
@@ -13,6 +14,7 @@ var processRoot = function (root) {
 
 var addGulpTasks = function (gulp, config) {
     var applications;
+    var components;
     var applicationTasks = {
         main: [],
         js: [],
@@ -23,6 +25,8 @@ var addGulpTasks = function (gulp, config) {
     config = config || {};
 
     applications = config.applications;
+
+    components = config.components;
 
     config.root = processRoot(config.root);
 
@@ -36,9 +40,16 @@ var addGulpTasks = function (gulp, config) {
         });
     }
 
+    if (components) {
+        componentsBuildTaskGenerator.addComponentsBuildTasks(gulp, config, components);
+
+        gulp.task('pre-publish-components', ['components:build-js', 'components:build-scss'], function (cb) {});
+    }
+
     addBrowserSyncTask(gulp, config, applicationTasks);
 
     gulp.task('default', applicationTasks.main.concat(['browser-sync']), function (cb) {});
+
 };
 
 module.exports = {

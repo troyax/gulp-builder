@@ -28,6 +28,7 @@
     "del": "^1.1.1",
     "font-awesome": "^4.3.0",
     "gulp": "^3.8.11",
+    "gulp-babel": "^5.2.1",
     "gulp-compile-handlebars": "^0.4.4",
     "gulp-concat": "^2.5.2",
     "gulp-handlebars": "^4.0.0",
