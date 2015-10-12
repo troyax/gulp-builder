@@ -2,6 +2,7 @@ var _ = require('lodash');
 var buildTaskGenerator = require('./tasks/build/task-generator');
 var componentsBuildTaskGenerator = require('./tasks/components/task-generator');
 var addBrowserSyncTask = require('./tasks/server/browser-sync').addBrowserSyncTask;
+var addSourcesTasks = require('./tasks/sources/task-generator').addSourcesTasks;
 
 var processRoot = function (root) {
 
@@ -15,6 +16,7 @@ var processRoot = function (root) {
 var addGulpTasks = function (gulp, config) {
     var applications;
     var components;
+    var sources;
     var applicationTasks = {
         main: [],
         js: [],
@@ -27,6 +29,8 @@ var addGulpTasks = function (gulp, config) {
     applications = config.applications;
 
     components = config.components;
+
+    sources = config.sources || {};
 
     config.root = processRoot(config.root);
 
@@ -46,7 +50,18 @@ var addGulpTasks = function (gulp, config) {
         gulp.task('pre-publish-components', ['components:build-js', 'components:build-scss'], function (cb) {});
     }
 
+    if (sources) {
+
+        if (sources.icons) {
+            _.each(sources.icons, function (icons) {
+                applicationTasks.main.push(icons + '-icons');
+            });
+        }
+    }
+
     addBrowserSyncTask(gulp, config, applicationTasks);
+
+    addSourcesTasks(gulp, config);
 
     gulp.task('default', applicationTasks.main.concat(['browser-sync']), function (cb) {});
 
