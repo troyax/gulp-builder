@@ -9,15 +9,26 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var handlebars = require('gulp-compile-handlebars');
 var cssmin = require('gulp-minify-css');
+var fs = require('fs');
+var lodash = require('lodash');
 
 var addJavaScriptBuildTask = function (gulp, config, application, taskName) {
     var destination = config.root + config.build.dir + (application.destination || '');
     var mainFile = config.root + (application.path || '') + (application.build.js.entry || 'index.js');
 
     gulp.task(taskName, function () {
-        var bundle = browserify(mainFile).transform(reactify).bundle().on('error', function (error) {
+        var bundle = browserify(mainFile);
+        var pipeline = bundle.pipeline;
+
+        pipeline.on('file', function (filePath, fileId) {
+            if (filePath.indexOf('node_modules') === -1) {
+                application.requiredFilePaths.push(fileId);
+            }
+        });
+
+        bundle = bundle.transform(reactify).bundle().on('error', function (error) {
             console.log(error);
-            this.emit('end')
+            this.emit('end');
         });
 
         return bundle.pipe(source( application.build.js.rename || 'app.js' ))
@@ -30,23 +41,40 @@ var addJavaScriptBuildTask = function (gulp, config, application, taskName) {
 
 var addSassBuildTask = function (gulp, config, application, taskName) {
     var destination = config.root + config.build.dir + (application.destination || '');
-    var mainFile = config.root + (application.path || '') + (application.build.sass.entry || 'main.scss');
-    var files = [mainFile];
+    var mainFile = config.root + (application.path || '') + (application.build.sass.entry || 'index');
 
     /*
-    if (buildInfo.sass['fontAwesome']) {
-        files.unshift(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/scss/font-awesome.scss');
+     if (buildInfo.sass['fontAwesome']) {
+     files.unshift(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/scss/font-awesome.scss');
 
-        gulp.src(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/fonts/*')
-            .pipe(gulp.dest(options.build.root + buildInfo.destination + 'fonts/'));
-    }
-    */
+     gulp.src(options.root + '/node_modules/gulp-builder/node_modules/font-awesome/fonts/*')
+     .pipe(gulp.dest(options.build.root + buildInfo.destination + 'fonts/'));
+     }
+     */
 
     gulp.task(taskName, function () {
-        var bundle = gulp.src(files).pipe(sass()).on('error', function (error) {
-            console.log(error);
-            this.emit('end')
+        var bundle;
+        var filesToCompile = ['sass/main', mainFile].concat(lodash.filter(application.requiredFilePaths, function (file, index) {
+            var value = false;
+
+            try {
+                value = fs.statSync(file + '.scss');
+            } catch (error) {}
+
+            return Boolean(value);
+        }));
+
+
+        filesToCompile = lodash.map(filesToCompile, function (fileId) {
+            return fileId + '.scss';
         });
+
+        bundle = gulp.src(filesToCompile).pipe(sass()).on('error', function (error) {
+            console.log(error);
+            this.emit('end');
+        });
+
+        console.log(filesToCompile);
 
         return  bundle.pipe(concat(application.build.sass.rename || 'style.css'))
             .pipe(gulpif(config.minify, cssmin()))

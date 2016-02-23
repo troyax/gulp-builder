@@ -1,4 +1,5 @@
 var helper = require('./task-helper');
+var runSequence = require('run-sequence');
 
 var addBuildTasks = function (gulp, config, application) {
     var applicationName = application.id;
@@ -11,7 +12,9 @@ var addBuildTasks = function (gulp, config, application) {
     helper.addSassBuildTask(gulp, config, application, sassBuildTaskName);
     helper.addHTMLBuildTask(gulp, config, application, htmlBuildTaskName);
 
-    gulp.task(applicationBuildTaskName, [jsBuildTaskName, sassBuildTaskName, htmlBuildTaskName]);
+    gulp.task(applicationBuildTaskName, function (cb) {
+        runSequence(jsBuildTaskName, sassBuildTaskName, htmlBuildTaskName, cb);
+    });
 
     return {
         js: jsBuildTaskName,

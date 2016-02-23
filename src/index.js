@@ -37,6 +37,8 @@ var addGulpTasks = function (gulp, config) {
     if (applications) {
         _.each(applications, function (application) {
             var taskNames = buildTaskGenerator.addBuildTasks(gulp, config, application);
+
+            application.requiredFilePaths = [];
             applicationTasks.main.push(taskNames.main);
             applicationTasks.js.push(taskNames.js);
             applicationTasks.sass.push(taskNames.sass);
