@@ -3,6 +3,7 @@ var buildTaskGenerator = require('./tasks/build/task-generator');
 var componentsBuildTaskGenerator = require('./tasks/components/task-generator');
 var addBrowserSyncTask = require('./tasks/server/browser-sync').addBrowserSyncTask;
 var addSourcesTasks = require('./tasks/sources/task-generator').addSourcesTasks;
+var runSequence = require('run-sequence');
 
 var processRoot = function (root) {
 
@@ -65,7 +66,9 @@ var addGulpTasks = function (gulp, config) {
 
     addSourcesTasks(gulp, config);
 
-    gulp.task('default', applicationTasks.main.concat(['browser-sync']), function (cb) {});
+    gulp.task('default', function (cb) {
+        runSequence(applicationTasks.main, 'browser-sync', cb);
+    });
 
 };
 

@@ -69,12 +69,12 @@ var addSassBuildTask = function (gulp, config, application, taskName) {
             return fileId + '.scss';
         });
 
+        filesToCompile = updateCompilationOrder(filesToCompile, config.fileDependencies);
+
         bundle = gulp.src(filesToCompile).pipe(sass()).on('error', function (error) {
             console.log(error);
             this.emit('end');
         });
-
-        console.log(filesToCompile);
 
         return  bundle.pipe(concat(application.build.sass.rename || 'style.css'))
             .pipe(gulpif(config.minify, cssmin()))
@@ -100,8 +100,35 @@ var addHTMLBuildTask = function (gulp, config, application, taskName) {
     });
 };
 
+var updateCompilationOrder = function (filesToCompile, dependencies) {
+
+    _.forEach(filesToCompile, function (fileId, fileIndex) {
+        var indexToBeMoved = fileIndex;
+        var aux;
+
+        _.forEach(dependencies, function (otherFileDependencies, key) {
+            var consumerIndex;
+
+            if (otherFileDependencies.indexOf(fileId) > -1) {
+                consumerIndex = filesToCompile.indexOf(key);
+
+                if (indexToBeMoved > consumerIndex) {
+                    indexToBeMoved = consumerIndex;
+                }
+            }
+        });
+
+        aux = filesToCompile[indexToBeMoved];
+        filesToCompile[indexToBeMoved] = fileId;
+        filesToCompile[fileIndex] = aux;
+    });
+
+    return filesToCompile;
+};
+
 module.exports = {
     addJavaScriptBuildTask: addJavaScriptBuildTask,
     addSassBuildTask: addSassBuildTask,
-    addHTMLBuildTask: addHTMLBuildTask
+    addHTMLBuildTask: addHTMLBuildTask,
+    updateCompilationOrder: updateCompilationOrder
 };
