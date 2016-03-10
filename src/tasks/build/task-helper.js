@@ -11,10 +11,11 @@ var handlebars = require('gulp-compile-handlebars');
 var cssmin = require('gulp-minify-css');
 var fs = require('fs');
 var lodash = require('lodash');
+var path = require('path');
 
 var addJavaScriptBuildTask = function (gulp, config, application, taskName) {
-    var destination = config.root + config.build.dir + (application.destination || '');
-    var mainFile = config.root + (application.path || '') + (application.build.js.entry || 'index.js');
+    var destination = path.join(config.root, config.build.dir, (application.destination || ''));
+    var mainFile = path.join(config.root, (application.path || ''), (application.build.js.entry || 'index.js'));
 
     gulp.task(taskName, function () {
         var bundle = browserify(mainFile);
@@ -31,17 +32,17 @@ var addJavaScriptBuildTask = function (gulp, config, application, taskName) {
             this.emit('end');
         });
 
-        return bundle.pipe(source( application.build.js.rename || 'app.js' ))
+        return bundle.pipe(source(application.build.js.rename || 'app.js' ))
             .pipe(gulpif(config.minify, buffer()))
             .pipe(gulpif(config.minify, uglify()))
-            .pipe(gulp.dest( destination + 'js/' ))
+            .pipe(gulp.dest(path.join(destination, 'js')))
             .pipe(browserSync.reload({stream: true}));
     });
 };
 
 var addSassBuildTask = function (gulp, config, application, taskName) {
-    var destination = config.root + config.build.dir + (application.destination || '');
-    var mainFile = config.root + (application.path || '') + (application.build.sass.entry || 'index');
+    var destination = path.join(config.root, config.build.dir, (application.destination || ''));
+    var mainFile = path.join(config.root, (application.path || ''), (application.build.sass.entry || 'index'));
 
     /*
      if (buildInfo.sass['fontAwesome']) {
@@ -78,14 +79,14 @@ var addSassBuildTask = function (gulp, config, application, taskName) {
 
         return  bundle.pipe(concat(application.build.sass.rename || 'style.css'))
             .pipe(gulpif(config.minify, cssmin()))
-            .pipe(gulp.dest(destination + 'css/'))
+            .pipe(gulp.dest(path.join(destination, 'css')))
             .pipe(browserSync.reload({stream: true}));
     });
 };
 
 var addHTMLBuildTask = function (gulp, config, application, taskName) {
-    var destination = config.root + config.build.dir + (application.destination || '');
-    var mainFile = config.root + (application.path || '') + (application.build.html.entry || 'index.html');
+    var destination = path.join(config.root, config.build.dir, (application.destination || ''));
+    var mainFile = path.join(config.root, (application.path || ''), (application.build.html.entry || 'index.html'));
 
     gulp.task(taskName, function () {
         var bundle = gulp.src(mainFile).on('error', function (error) {
@@ -102,25 +103,27 @@ var addHTMLBuildTask = function (gulp, config, application, taskName) {
 
 var updateCompilationOrder = function (filesToCompile, dependencies) {
 
-    _.forEach(filesToCompile, function (fileId, fileIndex) {
+    lodash.forEach(filesToCompile, function (fileId, fileIndex) {
         var indexToBeMoved = fileIndex;
         var aux;
 
-        _.forEach(dependencies, function (otherFileDependencies, key) {
-            var consumerIndex;
+        if (dependencies[fileId]) {
+            lodash.forEach(dependencies, function (otherFileDependencies, key) {
+                var consumerIndex;
 
-            if (otherFileDependencies.indexOf(fileId) > -1) {
-                consumerIndex = filesToCompile.indexOf(key);
+                if (otherFileDependencies.indexOf(fileId) > -1) {
+                    consumerIndex = filesToCompile.indexOf(key);
 
-                if (indexToBeMoved > consumerIndex) {
-                    indexToBeMoved = consumerIndex;
+                    if (indexToBeMoved > consumerIndex) {
+                        indexToBeMoved = consumerIndex;
+                    }
                 }
-            }
-        });
+            });
 
-        aux = filesToCompile[indexToBeMoved];
-        filesToCompile[indexToBeMoved] = fileId;
-        filesToCompile[fileIndex] = aux;
+            aux = filesToCompile[indexToBeMoved];
+            filesToCompile[indexToBeMoved] = fileId;
+            filesToCompile[fileIndex] = aux;
+        }
     });
 
     return filesToCompile;
