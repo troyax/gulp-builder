@@ -30,7 +30,7 @@ module.exports = function(config) {
 
         browserify: {
             debug: true,
-            transform: [ ['coverageify', coverageifyConfig], [ 'rewireify' ] ]
+            transform: [ ['coverageify', coverageifyConfig], [ 'rewireify' ], 'aliasify' ]
         },
 
         browsers : ['PhantomJS'],
