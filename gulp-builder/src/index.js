@@ -25,7 +25,7 @@ var addGulpTasks = function (gulp, config) {
         html: []
     };
 
-    process.env.NODE_PATH = __dirname;
+    process.env.NODE_PATH = config.root;
 
     config = config || {};
 
