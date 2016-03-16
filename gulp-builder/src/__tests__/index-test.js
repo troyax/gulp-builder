@@ -46,7 +46,7 @@ describe('The Gulp Builder', function () {
         });
     });
 
-    describe('when addGulpTask method is called', function () {
+    xdescribe('when addGulpTask method is called', function () {
         var processRootStub = stub().returns('/home/dev/my-project/');
 
         beforeEach(function () {
