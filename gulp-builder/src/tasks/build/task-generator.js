@@ -1,4 +1,4 @@
-var helper = require('./task-helper');
+var helper = require('gulp-builder/src/tasks/build/task-helper');
 var runSequence = require('run-sequence');
 
 var addBuildTasks = function (gulp, config, application) {

@@ -61,7 +61,8 @@
     "phantomjs": "^1.9.18",
     "rewireify": "^0.2.0",
     "sinon": "^1.16.1",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "validator": "^5.1.0"
   },
   "aliasify": {
     "aliases": {}

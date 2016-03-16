@@ -1,8 +1,8 @@
 var _ = require('lodash');
-var buildTaskGenerator = require('./tasks/build/task-generator');
-var componentsBuildTaskGenerator = require('./tasks/components/task-generator');
-var addBrowserSyncTask = require('./tasks/server/browser-sync').addBrowserSyncTask;
-var addSourcesTasks = require('./tasks/sources/task-generator').addSourcesTasks;
+var buildTaskGenerator = require('gulp-builder/src/tasks/build/task-generator');
+var componentsBuildTaskGenerator = require('gulp-builder/src/tasks/components/task-generator');
+var addBrowserSyncTask = require('gulp-builder/src/tasks/server/browser-sync').addBrowserSyncTask;
+var addSourcesTasks = require('gulp-builder/src/tasks/sources/task-generator').addSourcesTasks;
 var runSequence = require('run-sequence');
 
 var processRoot = function (root) {
@@ -24,6 +24,8 @@ var addGulpTasks = function (gulp, config) {
         sass: [],
         html: []
     };
+
+    process.env.NODE_PATH = __dirname;
 
     config = config || {};
 

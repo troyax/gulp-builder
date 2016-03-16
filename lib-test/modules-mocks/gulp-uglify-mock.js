@@ -1,0 +1,1 @@
+module.exports = stub().returns('gulp-uglify');
