@@ -51,6 +51,8 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "coverageify": "^1.0.4",
+    "gulp-exec": "^2.1.2",
+    "gulp-rimraf": "^0.2.0",
     "karma": "^0.13.2",
     "karma-browserify": "^4.2.1",
     "karma-chai": "^0.1.0",
@@ -62,7 +64,8 @@
     "rewireify": "^0.2.0",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",
-    "validator": "^5.1.0"
+    "validator": "^5.1.0",
+    "yargs": "^4.3.1"
   },
   "aliasify": {
     "aliases": {}
