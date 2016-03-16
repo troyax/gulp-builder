@@ -6,7 +6,7 @@ var rimraf = require('gulp-rimraf');
 gulp.task('release', function () {
     var version = argv.version || 'patch';
 
-    gulp.src('./package.json')
+    gulp.src(['./package.json', './README.md'])
         .pipe(exec('npm version ' + version))
         .pipe(gulp.dest('./gulp-builder'))
         .pipe(exec('cd gulp-builder'))
