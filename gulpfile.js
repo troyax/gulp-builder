@@ -10,7 +10,7 @@ gulp.task('release', function () {
         .pipe(exec('npm version ' + version))
         .pipe(gulp.dest('./gulp-builder'))
         .pipe(exec('cd gulp-builder'))
-        //.pipe(exec('npm publish'))
+        .pipe(exec('npm publish'))
         .pipe(exec('cd ../'))
         .pipe(rimraf())
 });
