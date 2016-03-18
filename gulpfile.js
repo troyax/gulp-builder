@@ -1,16 +1,33 @@
 var gulp = require('gulp');
+var exec = require('child_process').exec;
+var del = require('del');
+var runSequence = require('run-sequence');
 var argv = require('yargs').argv;
-var exec = require('gulp-exec');
-var rimraf = require('gulp-rimraf');
 
-gulp.task('release', function () {
+gulp.task('release:update', function (cb) {
     var version = argv.version || 'patch';
 
-    gulp.src(['./package.json', './README.md'])
-        .pipe(exec('npm version ' + version))
-        .pipe(gulp.dest('./gulp-builder'))
-        .pipe(exec('cd gulp-builder'))
-        .pipe(exec('npm publish'))
-        .pipe(exec('cd ../'))
-        .pipe(rimraf())
+    exec('npm version ' + version, function (err) {
+        cb(err);
+    });
+});
+
+gulp.task('release:move-files', function () {
+    return gulp.src(['./package.json', './README.md']).pipe(gulp.dest('./gulp-builder'));
+});
+
+gulp.task('release:publish', function (cb) {
+    exec('npm publish ./gulp-builder', function (err) {
+        cb(err);
+    });
+});
+
+gulp.task('release:clean', function (cb) {
+    del(['./gulp-builder/package.json', './gulp-builder/README.md']);
+
+    cb();
+});
+
+gulp.task('release', function (cb) {
+    runSequence('release:update', 'release:move-files', 'release:publish', 'release:clean', cb);
 });
