@@ -49,6 +49,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {
+    "aliasify-mocks": "0.0.10",
     "chai": "^3.2.0",
     "coverageify": "^1.0.4",
     "gulp-exec": "^2.1.2",
