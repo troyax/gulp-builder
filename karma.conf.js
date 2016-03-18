@@ -21,6 +21,7 @@ module.exports = function(config) {
         ],
         modules: 'lib-test/modules-mocks',
         mockFilePattern: '-mock.js',
+        mockFolderPattern: '__mocks__',
         aliases: aliases
     });
 
