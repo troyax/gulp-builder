@@ -1,4 +1,6 @@
 # gulp-builder
+[![Build Status](https://travis-ci.org/troianoandres/gulp-builder.svg?branch=master)](https://travis-ci.org/troianoandres/gulp-builder)
+
 Gulp builder project, used to build all kind of project, intended to have flexibility for each one of them.
 Includes all kind of tasks and utils 
 
