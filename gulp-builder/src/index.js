@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var path = require('path');
 var buildTaskGenerator = require('gulp-builder/src/tasks/build/task-generator');
 var componentsBuildTaskGenerator = require('gulp-builder/src/tasks/components/task-generator');
 var addBrowserSyncTask = require('gulp-builder/src/tasks/server/browser-sync').addBrowserSyncTask;
@@ -39,7 +40,13 @@ var addGulpTasks = function (gulp, config) {
 
     if (applications) {
         _.each(applications, function (application) {
-            var taskNames = buildTaskGenerator.addBuildTasks(gulp, config, application);
+            var taskNames;
+
+            if (application.routes) {
+                application.routes = require(path.join(process.env.NODE_PATH, application.routes));
+            }
+
+            taskNames = buildTaskGenerator.addBuildTasks(gulp, config, application);
 
             application.requiredFilePaths = [];
             applicationTasks.main.push(taskNames.main);
